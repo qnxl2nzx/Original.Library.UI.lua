@@ -1,0 +1,121 @@
+local Library = {}
+local UserInputService = game:GetService("UserInputService")
+local TweenService = game:GetService("TweenService")
+local RunService = game:GetService("RunService")
+local CoreGui = game:GetService("CoreGui")
+
+-- UI のルートフォルダを作成
+local ScreenGui = Instance.new("ScreenGui")
+ScreenGui.Name = "VortexLibrary"
+ScreenGui.Parent = CoreGui
+
+---------------------------------------------------------------------
+-- ウィンドウを作る
+---------------------------------------------------------------------
+function Library:CreateWindow(WindowName)
+    local Window = {}
+
+    -- メインフレーム
+    local Main = Instance.new("Frame")
+    Main.Name = WindowName or "Window"
+    Main.Size = UDim2.new(0, 500, 0, 300)
+    Main.Position = UDim2.new(0.5, -250, 0.5, -150)
+    Main.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    Main.Parent = ScreenGui
+
+    -- 左のタブ
+    local TabHolder = Instance.new("Frame")
+    TabHolder.Name = "TabHolder"
+    TabHolder.Size = UDim2.new(0, 140, 1, 0)
+    TabHolder.BackgroundColor3 = Color3.fromRGB(25, 25, 25)
+    TabHolder.Parent = Main
+
+    -- Tab のレイアウト
+    local TabList = Instance.new("UIListLayout")
+    TabList.Parent = TabHolder
+    TabList.SortOrder = Enum.SortOrder.LayoutOrder
+    TabList.Padding = UDim.new(0, 5)
+
+    -- 右のページ内容
+    local PageHolder = Instance.new("Frame")
+    PageHolder.Name = "PageHolder"
+    PageHolder.Size = UDim2.new(1, -150, 1, 0)
+    PageHolder.Position = UDim2.new(0, 150, 0, 0)
+    PageHolder.BackgroundColor3 = Color3.fromRGB(30, 30, 30)
+    PageHolder.Parent = Main
+
+    -- window object 内部保持
+    Window.Main = Main
+    Window.PageHolder = PageHolder
+    Window.TabHolder = TabHolder
+
+    -----------------------------------------------------------------
+    -- ページ作成関数
+    -----------------------------------------------------------------
+    function Window:CreatePage(PageName)
+        local Page = {}
+
+        -- タブボタン
+        local TabButton = Instance.new("TextButton")
+        TabButton.Name = PageName .. "_Tab"
+        TabButton.Size = UDim2.new(1, -10, 0, 35)
+        TabButton.BackgroundColor3 = Color3.fromRGB(40,40,40)
+        TabButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+        TabButton.TextSize = 16
+        TabButton.Text = PageName
+        TabButton.Parent = TabHolder
+
+        -- ページ Frame
+        local PageFrame = Instance.new("Frame")
+        PageFrame.Name = PageName .. "_Page"
+        PageFrame.Size = UDim2.new(1, -10, 1, -10)
+        PageFrame.Position = UDim2.new(0, 5, 0, 5)
+        PageFrame.BackgroundTransparency = 1
+        PageFrame.Visible = false
+        PageFrame.Parent = PageHolder
+
+        -- レイアウト
+        local Layout = Instance.new("UIListLayout")
+        Layout.Padding = UDim.new(0, 5)
+        Layout.Parent = PageFrame
+
+        Page.Frame = PageFrame
+
+        -- タブクリックでページ切り替え
+        TabButton.MouseButton1Click:Connect(function()
+            for _, v in pairs(PageHolder:GetChildren()) do
+                if v:IsA("Frame") then
+                    v.Visible = false
+                end
+            end
+            PageFrame.Visible = true
+        end)
+
+        -----------------------------------------------------------------
+        -- ボタン追加
+        -----------------------------------------------------------------
+        function Page:AddButton(Text, Callback)
+            local Button = Instance.new("TextButton")
+            Button.Name = Text
+            Button.Size = UDim2.new(1, -10, 0, 35)
+            Button.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+            Button.TextColor3 = Color3.fromRGB(255, 255, 255)
+            Button.TextSize = 16
+            Button.Text = Text
+            Button.Parent = PageFrame
+
+            Button.MouseButton1Click:Connect(function()
+                pcall(Callback)
+            end)
+        end
+
+        return Page
+    end
+
+    return Window
+end
+
+---------------------------------------------------------------------
+-- ライブラリ返却
+---------------------------------------------------------------------
+return Library

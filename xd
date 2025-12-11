@@ -1,4 +1,4 @@
--- Vortex Library (UI uses your exact design)
+-- Vortex Library 完全版
 
 local Vortex = {}
 local UIS = game:GetService("UserInputService")
@@ -7,76 +7,61 @@ local RS = game:GetService("RunService")
 ----------------------------------------------------------------
 -- Window
 ----------------------------------------------------------------
-
 function Vortex:CreateWindow()
     local ScreenGui = Instance.new("ScreenGui")
     ScreenGui.Parent = game.CoreGui
-    ScreenGui.ResetOnSpawn = false
     ScreenGui.Name = "VortexLibrary"
+    ScreenGui.ResetOnSpawn = false
 
     ------------------------------------------------------------
-    -- ここから君の GUI をそのまま CoreGui へ入れ直す
+    -- MainHolder（全 UI をこれに入れる）
     ------------------------------------------------------------
+    local MainHolder = Instance.new("Frame", ScreenGui)
+    MainHolder.Size = UDim2.new(0, 454, 0, 466)
+    MainHolder.Position = UDim2.new(0.25, 0, 0.15, 0)
+    MainHolder.BackgroundTransparency = 1
+    MainHolder.Name = "MainHolder"
 
-    local Frame = Instance.new("Frame", ScreenGui)
+    ------------------------------------------------------------
+    -- ここから元の UI を配置（ズレないよう MainHolder 内に統一）
+    ------------------------------------------------------------
+    local Frame = Instance.new("Frame", MainHolder)
     Frame.BackgroundColor3 = Color3.fromRGB(62, 5, 48)
+    Frame.Size = UDim2.new(1, 0, 1, 0)
     Frame.BorderSizePixel = 0
-    Frame.Position = UDim2.new(0.243670881, 0, 0.148562297, 0)
-    Frame.Size = UDim2.new(0, 454, 0, 466)
-    Frame.Name = "MainFrame"
 
-    local Frame_2 = Instance.new("Frame", ScreenGui)
+    local Frame_2 = Instance.new("Frame", MainHolder)
     Frame_2.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
     Frame_2.BorderSizePixel = 0
-    Frame_2.Position = UDim2.new(0.252109706, 0, 0.158146963, 0)
+    Frame_2.Position = UDim2.new(0.02, 0, 0.02, 0)
     Frame_2.Size = UDim2.new(0, 439, 0, 455)
     Instance.new("UICorner", Frame_2)
 
-    local Frame_3 = Instance.new("Frame", ScreenGui)
+    local Frame_3 = Instance.new("Frame", MainHolder)
     Frame_3.BackgroundColor3 = Color3.fromRGB(30, 3, 30)
     Frame_3.BorderSizePixel = 0
-    Frame_3.Position = UDim2.new(0.25, 0, 0.260383397, 0)
+    Frame_3.Position = UDim2.new(0.02, 0, 0.24, 0)
     Frame_3.Size = UDim2.new(0, 439, 0, 4)
     Instance.new("UICorner", Frame_3)
 
-    local Frame_4 = Instance.new("Frame", ScreenGui)
+    local Frame_4 = Instance.new("Frame", MainHolder)
     Frame_4.BackgroundColor3 = Color3.fromRGB(30, 3, 30)
     Frame_4.BorderSizePixel = 0
-    Frame_4.Position = UDim2.new(0.495780587, 0, 0.158146963, 0)
+    Frame_4.Position = UDim2.new(0.55, 0, 0.02, 0)
     Frame_4.Size = UDim2.new(0, 7, 0, 455)
     Instance.new("UICorner", Frame_4)
 
-    local Frame_5 = Instance.new("Frame", ScreenGui)
+    local Frame_5 = Instance.new("Frame", MainHolder)
     Frame_5.BackgroundColor3 = Color3.fromRGB(30, 3, 30)
     Frame_5.BorderSizePixel = 0
-    Frame_5.Position = UDim2.new(0.627637148, 0, 0.158146963, 0)
+    Frame_5.Position = UDim2.new(0.82, 0, 0.02, 0)
     Frame_5.Size = UDim2.new(0, 7, 0, 64)
     Instance.new("UICorner", Frame_5)
 
-    local SearchBox = Instance.new("TextBox", ScreenGui)
-    SearchBox.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-    SearchBox.BorderSizePixel = 0
-    SearchBox.Position = UDim2.new(0.50316453, 0, 0.158146963, 0)
-    SearchBox.Size = UDim2.new(0, 118, 0, 64)
-    SearchBox.Font = Enum.Font.Fantasy
-    SearchBox.Text = "search..."
-    SearchBox.TextColor3 = Color3.fromRGB(165, 17, 165)
-    SearchBox.TextSize = 20
-
-    local Close = Instance.new("TextButton", ScreenGui)
-    Close.BackgroundColor3 = Color3.fromRGB(13, 13, 13)
-    Close.BorderSizePixel = 0
-    Close.Position = UDim2.new(0.635021091, 0, 0.158146963, 0)
-    Close.Size = UDim2.new(0, 74, 0, 64)
-    Close.Font = Enum.Font.SourceSans
-    Close.Text = "X"
-    Close.TextColor3 = Color3.fromRGB(169, 13, 221)
-    Close.TextSize = 20
-
-    local Title = Instance.new("TextLabel", ScreenGui)
+    local Title = Instance.new("TextLabel", MainHolder)
     Title.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
     Title.BorderSizePixel = 0
-    Title.Position = UDim2.new(0.252109706, 0, 0.158146963, 0)
+    Title.Position = UDim2.new(0.02, 0, 0.02, 0)
     Title.Size = UDim2.new(0, 231, 0, 64)
     Title.Font = Enum.Font.Fantasy
     Title.Text = "Vortex Library"
@@ -84,38 +69,60 @@ function Vortex:CreateWindow()
     Title.TextSize = 25
     Title.TextWrapped = true
 
-    ------------------------------------------------------------
-    -- Tabs（左側）と Pages（右側）の生成
-    ------------------------------------------------------------
+    local SearchBox = Instance.new("TextBox", MainHolder)
+    SearchBox.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+    SearchBox.BorderSizePixel = 0
+    SearchBox.Position = UDim2.new(0.56, 0, 0.02, 0)
+    SearchBox.Size = UDim2.new(0, 118, 0, 64)
+    SearchBox.Font = Enum.Font.Fantasy
+    SearchBox.Text = "search..."
+    SearchBox.TextColor3 = Color3.fromRGB(165, 17, 165)
+    SearchBox.TextSize = 20
 
+    local Close = Instance.new("TextButton", MainHolder)
+    Close.BackgroundColor3 = Color3.fromRGB(13, 13, 13)
+    Close.BorderSizePixel = 0
+    Close.Position = UDim2.new(0.82, 0, 0.02, 0)
+    Close.Size = UDim2.new(0, 74, 0, 64)
+    Close.Text = "X"
+    Close.TextColor3 = Color3.fromRGB(169, 13, 221)
+    Close.TextSize = 24
+    Close.Font = Enum.Font.Fantasy
+
+    ------------------------------------------------------------
+    -- Tabs（左側）
+    ------------------------------------------------------------
     local Tabs = Instance.new("Frame", Frame_2)
     Tabs.BackgroundTransparency = 1
-    Tabs.Position = UDim2.new(0, 0, 0, 70)
-    Tabs.Size = UDim2.new(0, 200, 0, 360)
+    Tabs.Position = UDim2.new(0, 10, 0, 80)
+    Tabs.Size = UDim2.new(0, 180, 0, 350)
+
     local TabList = Instance.new("UIListLayout", Tabs)
     TabList.Padding = UDim.new(0, 6)
 
+    ------------------------------------------------------------
+    -- Pages（右側）
+    ------------------------------------------------------------
     local Pages = Instance.new("Frame", Frame_2)
     Pages.BackgroundTransparency = 1
-    Pages.Position = UDim2.new(0, 10, 0, 70)
-    Pages.Size = UDim2.new(0, 380, 0, 360)
+    Pages.Position = UDim2.new(0, 200, 0, 80)
+    Pages.Size = UDim2.new(0, 230, 0, 350)
 
     local PageLayout = Instance.new("UIPageLayout", Pages)
+    PageLayout.EasingDirection = Enum.EasingDirection.InOut
     PageLayout.TweenTime = 0.25
-    PageLayout.FillDirection = Enum.FillDirection.Vertical
     PageLayout.SortOrder = Enum.SortOrder.LayoutOrder
 
     ------------------------------------------------------------
-    -- 閉じるボタン
+    -- Close
     ------------------------------------------------------------
     Close.MouseButton1Click:Connect(function()
         ScreenGui:Destroy()
     end)
 
     ------------------------------------------------------------
-    -- Window オブジェクト作成
+    -- Window object
     ------------------------------------------------------------
-
     local Window = {}
     Window.Pages = {}
     Window.Tabs = Tabs
@@ -123,17 +130,16 @@ function Vortex:CreateWindow()
     Window.PageLayout = PageLayout
 
     ------------------------------------------------------------
-    -- Tab 作成機能
+    -- CreateTab
     ------------------------------------------------------------
-
     function Window:CreateTab(name)
         local TabButton = Instance.new("TextButton", Tabs)
-        TabButton.Size = UDim2.new(0, 180, 0, 40)
-        TabButton.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+        TabButton.Size = UDim2.new(0, 170, 0, 40)
+        TabButton.BackgroundColor3 = Color3.fromRGB(20,20,20)
         TabButton.TextColor3 = Color3.fromRGB(150, 50, 200)
-        TabButton.Text = name
         TabButton.Font = Enum.Font.Fantasy
         TabButton.TextSize = 20
+        TabButton.Text = name
 
         local Page = Instance.new("Frame", Pages)
         Page.Size = UDim2.new(1, 0, 1, 0)
@@ -149,18 +155,15 @@ function Vortex:CreateWindow()
         end)
 
         --------------------------------------------------------
-        -- Page object
-        --------------------------------------------------------
         local PageObj = {}
         PageObj.Frame = Page
+        --------------------------------------------------------
 
-        --------------------------------------------------------
         -- Button
-        --------------------------------------------------------
         function PageObj:AddButton(text, callback)
             local Btn = Instance.new("TextButton", Page)
-            Btn.Size = UDim2.new(0, 350, 0, 40)
-            Btn.BackgroundColor3 = Color3.fromRGB(30, 3, 30)
+            Btn.Size = UDim2.new(0, 220, 0, 40)
+            Btn.BackgroundColor3 = Color3.fromRGB(30,3,30)
             Btn.TextColor3 = Color3.fromRGB(200, 150, 255)
             Btn.Font = Enum.Font.Fantasy
             Btn.TextSize = 20
@@ -171,19 +174,17 @@ function Vortex:CreateWindow()
             end)
         end
 
-        --------------------------------------------------------
         -- Toggle
-        --------------------------------------------------------
         function PageObj:AddToggle(text, default, callback)
             local Btn = Instance.new("TextButton", Page)
-            Btn.Size = UDim2.new(0, 350, 0, 40)
-            Btn.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-            Btn.TextColor3 = Color3.fromRGB(255, 130, 255)
+            Btn.Size = UDim2.new(0, 220, 0, 40)
+            Btn.BackgroundColor3 = Color3.fromRGB(20,20,20)
+            Btn.TextColor3 = Color3.fromRGB(255,130,255)
             Btn.Font = Enum.Font.Fantasy
             Btn.TextSize = 20
-            Btn.Text = text .. ": " .. tostring(default)
 
             local state = default
+            Btn.Text = text .. ": " .. tostring(state)
 
             Btn.MouseButton1Click:Connect(function()
                 state = not state
@@ -192,49 +193,45 @@ function Vortex:CreateWindow()
             end)
         end
 
-        --------------------------------------------------------
         -- Label
-        --------------------------------------------------------
         function PageObj:AddLabel(text)
             local L = Instance.new("TextLabel", Page)
-            L.Size = UDim2.new(0, 350, 0, 40)
-            L.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
-            L.TextColor3 = Color3.fromRGB(150, 0, 255)
+            L.Size = UDim2.new(0, 220, 0, 40)
+            L.BackgroundColor3 = Color3.fromRGB(20,20,20)
+            L.TextColor3 = Color3.fromRGB(150,0,255)
             L.Font = Enum.Font.Fantasy
             L.TextSize = 22
             L.Text = text
         end
 
-        --------------------------------------------------------
         -- Slider
-        --------------------------------------------------------
         function PageObj:AddSlider(text, config, callback)
-            local Frame = Instance.new("Frame", Page)
-            Frame.Size = UDim2.new(0, 350, 0, 40)
-            Frame.BackgroundColor3 = Color3.fromRGB(20, 20, 20)
+            local Holder = Instance.new("Frame", Page)
+            Holder.Size = UDim2.new(0, 220, 0, 40)
+            Holder.BackgroundColor3 = Color3.fromRGB(20,20,20)
 
-            local Bar = Instance.new("Frame", Frame)
-            Bar.BackgroundColor3 = Color3.fromRGB(60, 0, 60)
+            local Bar = Instance.new("Frame", Holder)
+            Bar.BackgroundColor3 = Color3.fromRGB(60,0,60)
             Bar.Size = UDim2.new(0, 0, 1, 0)
 
-            local Label = Instance.new("TextLabel", Frame)
-            Label.BackgroundTransparency = 1
+            local Label = Instance.new("TextLabel", Holder)
             Label.Size = UDim2.new(1, 0, 1, 0)
+            Label.BackgroundTransparency = 1
             Label.Font = Enum.Font.Fantasy
+            Label.TextColor3 = Color3.fromRGB(200,100,200)
             Label.TextSize = 20
-            Label.TextColor3 = Color3.fromRGB(200, 100, 200)
             Label.Text = text .. ": " .. config.default
 
             local dragging = false
 
-            Frame.InputBegan:Connect(function(Input)
-                if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+            Holder.InputBegan:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 then
                     dragging = true
                 end
             end)
 
-            Frame.InputEnded:Connect(function(Input)
-                if Input.UserInputType == Enum.UserInputType.MouseButton1 then
+            Holder.InputEnded:Connect(function(input)
+                if input.UserInputType == Enum.UserInputType.MouseButton1 then
                     dragging = false
                 end
             end)
@@ -242,14 +239,15 @@ function Vortex:CreateWindow()
             RS.RenderStepped:Connect(function()
                 if dragging then
                     local mouse = UIS:GetMouseLocation().X
-                    local start = Frame.AbsolutePosition.X
-                    local size = Frame.AbsoluteSize.X
+                    local start = Holder.AbsolutePosition.X
+                    local size = Holder.AbsoluteSize.X
                     local percent = math.clamp((mouse - start) / size, 0, 1)
 
                     Bar.Size = UDim2.new(percent, 0, 1, 0)
-                    local val = math.floor(config.min + (config.max - config.min) * percent)
 
+                    local val = math.floor(config.min + (config.max - config.min) * percent)
                     Label.Text = text .. ": " .. val
+
                     if callback then callback(val) end
                 end
             end)
